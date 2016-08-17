@@ -78,12 +78,6 @@ viewValidation : Model -> Html msg
 viewValidation model =
     let
         ( color, message ) =
-            -- if model.password == model.passwordAgain && String.length model.password >= 8 then
-            --     ( "green", "OK" )
-            -- else if String.length model.password < 8 then
-            --     ( "red", "Passwords too short" )
-            -- else
-            --     ( "red", "Passwords do not match!" )
             if String.length model.password < 8 then
                 ( "red", "Passwords too short" )
             else if not (model.password == model.passwordAgain) then
