@@ -85,10 +85,10 @@ viewValidation model =
             else if
                 not
                     (case String.toInt model.age of
-                        Err msg ->
+                        Err _ ->
                             False
 
-                        Ok val ->
+                        Ok _ ->
                             True
                     )
             then
