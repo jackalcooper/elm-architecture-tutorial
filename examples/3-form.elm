@@ -5,6 +5,7 @@ import Html.App as Html
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import String
+import Html.Events exposing (onClick)
 
 
 main =
@@ -24,12 +25,22 @@ type alias Model =
     , password : String
     , passwordAgain : String
     , age : String
+    , info :
+        { color : String
+        , message : String
+        }
     }
 
 
 model : Model
 model =
-    Model "" "" "" ""
+    Model ""
+        ""
+        ""
+        ""
+        { color = ""
+        , message = ""
+        }
 
 
 
@@ -41,6 +52,7 @@ type Msg
     | Password String
     | PasswordAgain String
     | Age String
+    | Submit
 
 
 update : Msg -> Model -> Model
@@ -58,6 +70,9 @@ update msg model =
         Age age ->
             { model | age = age }
 
+        Submit ->
+            { model | info = viewValidation model }
+
 
 
 -- VIEW
@@ -70,11 +85,16 @@ view model =
         , div [] [ input [ type' "password", placeholder "Password", onInput Password ] [] ]
         , div [] [ input [ type' "password", placeholder "Re-enter Password", onInput PasswordAgain ] [] ]
         , div [] [ input [ type' "text", placeholder "Age", onInput Age ] [] ]
-        , viewValidation model
+        , div [] [ button [ onClick Submit ] [ text "Submit" ] ]
+        , div [ style [ ( "color", model.info.color ) ] ] [ text model.info.message ]
         ]
 
 
-viewValidation : Model -> Html msg
+viewValidation :
+    Model
+    -> { color : String
+       , message : String
+       }
 viewValidation model =
     let
         ( color, message ) =
@@ -96,4 +116,4 @@ viewValidation model =
             else
                 ( "green", "OK" )
     in
-        div [ style [ ( "color", color ) ] ] [ text message ]
+        { color = color, message = message }
