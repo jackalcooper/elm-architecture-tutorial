@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import String
 import Html.Events exposing (onClick)
+import Regex
 
 
 main =
@@ -113,6 +114,20 @@ viewValidation model =
                     )
             then
                 ( "red", "Not a valid age" )
+            else if
+                let
+                    downcase =
+                        Regex.contains (Regex.regex "[a-z]") model.password == True
+
+                    upcase =
+                        Regex.contains (Regex.regex "[A-Z]") model.password == True
+
+                    numeric =
+                        Regex.contains (Regex.regex "\\d") model.password == True
+                in
+                    not (downcase && upcase && numeric)
+            then
+                ( "red", "Password too simple" )
             else
                 ( "green", "OK" )
     in
