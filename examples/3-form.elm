@@ -21,15 +21,18 @@ main =
 -- MODEL
 
 
+type alias Info =
+    { color : String
+    , message : String
+    }
+
+
 type alias Model =
     { name : String
     , password : String
     , passwordAgain : String
     , age : String
-    , info :
-        { color : String
-        , message : String
-        }
+    , info : Info
     }
 
 
@@ -91,11 +94,7 @@ view model =
         ]
 
 
-viewValidation :
-    Model
-    -> { color : String
-       , message : String
-       }
+viewValidation : Model -> Info
 viewValidation model =
     let
         ( color, message ) =
