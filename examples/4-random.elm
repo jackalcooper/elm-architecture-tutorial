@@ -49,7 +49,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            ( model, Random.generate NewFace (Random.map2 newFaceRecord (Random.int 1 6) (Random.int 1 6)) )
+            ( model, Random.generate NewFace (Random.map2 newFaceRecord (Random.int 1 10) (Random.int 1 10)) )
 
         NewFace newFace ->
             let
@@ -76,14 +76,14 @@ view : Model -> Html Msg
 view model =
     let
         radius =
-            toString (model.dieFace1 * 10)
+            toString (model.dieFace1 * model.dieFace2)
     in
         div []
             [ h1 [] [ Html.text (toString model.dieFace1) ]
             , h1 [] [ Html.text (toString model.dieFace2) ]
             , button [ onClick Roll ] [ Html.text "Roll" ]
             , Svg.svg
-                [ viewBox "0 0 120 120", width "300px" ]
-                [ circle [ cx "60", cy "60", r radius, fill "#0B79CE" ] []
+                [ viewBox "0 0 200 200", width "300px" ]
+                [ circle [ cx "100", cy "100", r radius, fill "#0B79CE" ] []
                 ]
             ]
