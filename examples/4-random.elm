@@ -42,8 +42,8 @@ type Msg
 
 
 type alias FaceRecord =
-    { newFace1 : Int
-    , newFace2 : Int
+    { face1 : Int
+    , face2 : Int
     }
 
 
@@ -56,7 +56,7 @@ update msg model =
         NewFace newFace ->
             let
                 model =
-                    { model | dieFace1 = newFace.newFace1, dieFace2 = newFace.newFace2 }
+                    { model | dieFace1 = newFace.face1, dieFace2 = newFace.face2 }
             in
                 ( model, Cmd.none )
 
