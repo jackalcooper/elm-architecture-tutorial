@@ -41,15 +41,17 @@ type Msg
     | NewFace { newFace1 : Int, newFace2 : Int }
 
 
-newFaceRecord newFace1 newFace2 =
-    { newFace1 = newFace1, newFace2 = newFace2 }
+type alias FaceRecord =
+    { newFace1 : Int
+    , newFace2 : Int
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            ( model, Random.generate NewFace (Random.map2 newFaceRecord (Random.int 1 10) (Random.int 1 10)) )
+            ( model, Random.generate NewFace (Random.map2 FaceRecord (Random.int 1 10) (Random.int 1 10)) )
 
         NewFace newFace ->
             let
