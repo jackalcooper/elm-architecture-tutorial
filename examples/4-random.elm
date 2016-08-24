@@ -24,13 +24,12 @@ main =
 
 
 type alias Model =
-    { dieFace : Int
-    }
+    { dieFace1 : Int, dieFace2 : Int }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model 1, Cmd.none )
+    ( Model 1 1, Cmd.none )
 
 
 
@@ -55,13 +54,15 @@ update msg model =
 
         NewFace newFace ->
             let
-                newFace1 =
-                    newFace.newFace1
-
-                newFace2 =
-                    newFace.newFace2
+                -- newFace1 =
+                --     newFace.newFace1
+                --
+                -- newFace2 =
+                --     newFace.newFace2
+                model =
+                    { model | dieFace1 = newFace.newFace1, dieFace2 = newFace.newFace2 }
             in
-                ( Model newFace1, Cmd.none )
+                ( model, Cmd.none )
 
 
 
@@ -81,10 +82,11 @@ view : Model -> Html Msg
 view model =
     let
         radius =
-            toString (model.dieFace * 10)
+            toString (model.dieFace1 * 10)
     in
         div []
-            [ h1 [] [ Html.text (toString model.dieFace) ]
+            [ h1 [] [ Html.text (toString model.dieFace1) ]
+            , h1 [] [ Html.text (toString model.dieFace2) ]
             , button [ onClick Roll ] [ Html.text "Roll" ]
             , Svg.svg
                 [ viewBox "0 0 120 120", width "300px" ]
