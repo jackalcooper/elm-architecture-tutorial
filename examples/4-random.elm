@@ -38,7 +38,7 @@ init =
 
 type Msg
     = Roll
-    | NewFace { newFace1 : Int, newFace2 : Int }
+    | NewFace FaceRecord
 
 
 type alias FaceRecord =
