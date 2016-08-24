@@ -49,16 +49,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            -- ( model, Random.generate NewFace (Random.list 2 (Random.int 1 6)) )
             ( model, Random.generate NewFace (Random.map2 newFaceRecord (Random.int 1 6) (Random.int 1 6)) )
 
         NewFace newFace ->
             let
-                -- newFace1 =
-                --     newFace.newFace1
-                --
-                -- newFace2 =
-                --     newFace.newFace2
                 model =
                     { model | dieFace1 = newFace.newFace1, dieFace2 = newFace.newFace2 }
             in
