@@ -6,6 +6,8 @@ import Html.Events exposing (..)
 import Random
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Array
+import List
 
 
 main =
@@ -37,17 +39,29 @@ init =
 
 type Msg
     = Roll
-    | NewFace Int
+    | NewFace { newFace1 : Int, newFace2 : Int }
+
+
+newFaceRecord newFace1 newFace2 =
+    { newFace1 = newFace1, newFace2 = newFace2 }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            ( model, Random.generate NewFace (Random.int 1 6) )
+            -- ( model, Random.generate NewFace (Random.list 2 (Random.int 1 6)) )
+            ( model, Random.generate NewFace (Random.map2 newFaceRecord (Random.int 1 6) (Random.int 1 6)) )
 
         NewFace newFace ->
-            ( Model newFace, Cmd.none )
+            let
+                newFace1 =
+                    newFace.newFace1
+
+                newFace2 =
+                    newFace.newFace2
+            in
+                ( Model newFace1, Cmd.none )
 
 
 
