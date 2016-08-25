@@ -1,3 +1,5 @@
+module Main exposing (..)
+
 import Html exposing (..)
 import Html.App as Html
 import Html.Attributes exposing (..)
@@ -7,14 +9,13 @@ import Json.Decode as Json
 import Task
 
 
-
 main =
-  Html.program
-    { init = init "cats"
-    , view = view
-    , update = update
-    , subscriptions = subscriptions
-    }
+    Html.program
+        { init = init "cats"
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
 
 
 
@@ -22,16 +23,17 @@ main =
 
 
 type alias Model =
-  { topic : String
-  , gifUrl : String
-  }
+    { topic : String
+    , gifUrl : String
+    , notice_text : String
+    }
 
 
-init : String -> (Model, Cmd Msg)
+init : String -> ( Model, Cmd Msg )
 init topic =
-  ( Model topic "waiting.gif"
-  , getRandomGif topic
-  )
+    ( Model topic "waiting.gif" "Click to get an image"
+    , getRandomGif topic
+    )
 
 
 
@@ -39,22 +41,22 @@ init topic =
 
 
 type Msg
-  = MorePlease
-  | FetchSucceed String
-  | FetchFail Http.Error
+    = MorePlease
+    | FetchSucceed String
+    | FetchFail Http.Error
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    MorePlease ->
-      (model, getRandomGif model.topic)
+    case msg of
+        MorePlease ->
+            ( model, getRandomGif model.topic )
 
-    FetchSucceed newUrl ->
-      (Model model.topic newUrl, Cmd.none)
+        FetchSucceed newUrl ->
+            ( Model model.topic newUrl "Request succeeded", Cmd.none )
 
-    FetchFail _ ->
-      (model, Cmd.none)
+        FetchFail _ ->
+            ( { model | notice_text = "Request failed" }, Cmd.none )
 
 
 
@@ -63,12 +65,13 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ h2 [] [text model.topic]
-    , button [ onClick MorePlease ] [ text "More Please!" ]
-    , br [] []
-    , img [src model.gifUrl] []
-    ]
+    div []
+        [ text model.notice_text
+        , h2 [] [ text model.topic ]
+        , button [ onClick MorePlease ] [ text "More Please!" ]
+        , br [] []
+        , img [ src model.gifUrl ] []
+        ]
 
 
 
@@ -77,7 +80,7 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+    Sub.none
 
 
 
@@ -86,13 +89,13 @@ subscriptions model =
 
 getRandomGif : String -> Cmd Msg
 getRandomGif topic =
-  let
-    url =
-      "//api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
-  in
-    Task.perform FetchFail FetchSucceed (Http.get decodeGifUrl url)
+    let
+        url =
+            "//api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
+    in
+        Task.perform FetchFail FetchSucceed (Http.get decodeGifUrl url)
 
 
 decodeGifUrl : Json.Decoder String
 decodeGifUrl =
-  Json.at ["data", "image_url"] Json.string
+    Json.at [ "data", "image_url" ] Json.string
