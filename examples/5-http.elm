@@ -44,6 +44,7 @@ type Msg
     = MorePlease
     | FetchSucceed String
     | FetchFail Http.Error
+    | ChangeTopic String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -58,6 +59,9 @@ update msg model =
         FetchFail _ ->
             ( { model | notice_text = "Request failed" }, Cmd.none )
 
+        ChangeTopic newTopic ->
+            ( { model | topic = newTopic }, Cmd.none )
+
 
 
 -- VIEW
@@ -67,8 +71,9 @@ view : Model -> Html Msg
 view model =
     div []
         [ text model.notice_text
-        , h2 [] [ text model.topic ]
-        , button [ onClick MorePlease ] [ text "More Please!" ]
+          -- , h2 [] [ text model.topic ]
+        , div [] [ input [ placeholder model.topic, onInput ChangeTopic ] [] ]
+        , div [] [ button [ onClick MorePlease ] [ text "More Please!" ] ]
         , br [] []
         , img [ src model.gifUrl ] []
         ]
